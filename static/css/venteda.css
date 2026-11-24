@@ -1,0 +1,297 @@
+/* ==========================================================================
+   VENTEDA CHAT — Master Design System (C - LIGHT GLASS)
+   Timeless, clean, Telegram-inspired messaging aesthetic
+   ========================================================================== */
+
+:root {
+  /* Default: Light Glass Visual Direction */
+  --bg-app: #f0f4f9;
+  --bg-sidebar: rgba(255, 255, 255, 0.94);
+  --bg-header: rgba(255, 255, 255, 0.88);
+  --bg-surface: #ffffff;
+  --bg-surface-hover: #f3f7fc;
+  --bg-surface-active: #e8f1fa;
+  --bg-input: #f2f6fa;
+  --bg-glass: rgba(255, 255, 255, 0.82);
+  
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #8292a6;
+  --text-inverse: #ffffff;
+
+  --border-color: #e2eaf4;
+  --border-glass: rgba(226, 234, 244, 0.8);
+
+  --accent-blue: #2563eb;
+  --accent-cyan: #0284c7;
+  --accent-soft: #e0f2fe;
+  --accent-glow: rgba(37, 99, 235, 0.15);
+
+  --bubble-out-start: #2563eb;
+  --bubble-out-end: #1d4ed8;
+  --bubble-out-text: #ffffff;
+  --bubble-in-bg: #ffffff;
+  --bubble-in-border: #e2eaf4;
+  --bubble-in-text: #0f172a;
+
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.06);
+  --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.07);
+
+  --wallpaper-overlay: rgba(37, 99, 235, 0.035);
+  --radius-bubble: 16px;
+  --radius-card: 20px;
+}
+
+/* Dark Theme Overrides */
+.dark,
+[data-theme="dark"] {
+  --bg-app: #080d16;
+  --bg-sidebar: rgba(15, 23, 38, 0.94);
+  --bg-header: rgba(15, 23, 38, 0.88);
+  --bg-surface: #111a28;
+  --bg-surface-hover: #162237;
+  --bg-surface-active: #1c2b44;
+  --bg-input: #152236;
+  --bg-glass: rgba(17, 26, 40, 0.84);
+
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #ffffff;
+
+  --border-color: rgba(255, 255, 255, 0.08);
+  --border-glass: rgba(255, 255, 255, 0.1);
+
+  --accent-blue: #38bdf8;
+  --accent-cyan: #00c2ff;
+  --accent-soft: rgba(0, 194, 255, 0.12);
+  --accent-glow: rgba(56, 189, 248, 0.2);
+
+  --bubble-out-start: #0284c7;
+  --bubble-out-end: #0369a1;
+  --bubble-out-text: #ffffff;
+  --bubble-in-bg: #152236;
+  --bubble-in-border: rgba(255, 255, 255, 0.07);
+  --bubble-in-text: #f8fafc;
+
+  --shadow-md: 0 4px 12px -2px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.45);
+  --shadow-glass: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+
+  --wallpaper-overlay: rgba(56, 189, 248, 0.025);
+}
+
+/* Global Reset & Base */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", "Vazirmatn", Arial, sans-serif;
+  background-color: var(--bg-app);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* RTL Language Adaptations */
+[dir="rtl"] {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir="rtl"] .icon-flip-rtl {
+  transform: scaleX(-1);
+}
+
+/* Glass Panels */
+.glass-panel {
+  background: var(--bg-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+}
+
+.glass-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-card);
+}
+
+/* Telegram Canvas Wallpaper */
+.chat-canvas-bg {
+  background-color: var(--bg-app);
+  background-image: 
+    radial-gradient(circle at 50% 30%, var(--accent-glow) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%232563eb' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+/* Wallpaper variations */
+.chat-canvas-bg.wallpaper-frosted {
+  background-image: radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.05) 0%, transparent 70%);
+}
+.chat-canvas-bg.wallpaper-midnight {
+  background-color: #060a12;
+  background-image: none;
+}
+.chat-canvas-bg.wallpaper-aurora {
+  background-image: linear-gradient(135deg, rgba(37, 99, 235, 0.05) 0%, rgba(16, 185, 129, 0.04) 100%);
+}
+.chat-canvas-bg.wallpaper-plain {
+  background-image: none;
+}
+
+/* Sleek Scrollbars */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+  50% { box-shadow: 0 0 0 12px rgba(37, 99, 235, 0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.16s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s infinite;
+}
+
+/* Custom Audio Player */
+.voice-waveform-container {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  height: 24px;
+}
+
+.voice-bar {
+  width: 3px;
+  border-radius: 2px;
+  background-color: currentColor;
+  opacity: 0.6;
+  transition: height 0.1s ease, opacity 0.1s ease;
+}
+
+.voice-bar.played {
+  opacity: 1;
+}
+
+/* Video Layouts */
+.video-container {
+  display: grid;
+  gap: 12px;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.video-container.layout-pip .remote-video-wrap {
+  width: 100%;
+  height: 100%;
+}
+.video-container.layout-pip .local-video-wrap {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 160px;
+  height: 120px;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  border: 2px solid white;
+  z-index: 10;
+}
+
+.video-container.layout-split {
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 640px) {
+  .video-container.layout-split {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+
+/* ==========================================================================
+   FORCED DARK THEME
+   Many templates use light Tailwind utilities without a dark: variant.
+   These rules remap them, but only on elements that already define their
+   own dark: variant for the same property, so explicit dark styles still win.
+   ========================================================================== */
+html.dark, html[data-theme="dark"] { color-scheme: dark; }
+html.dark body { background-color: #080d16; color: #f1f5f9; }
+html.dark ::placeholder { color: #64748b; }
+
+/* backgrounds */
+html.dark .bg-white:not([class*="dark:bg"]),
+html.dark .bg-white\/80:not([class*="dark:bg"]),
+html.dark .bg-white\/82:not([class*="dark:bg"]),
+html.dark .bg-white\/88:not([class*="dark:bg"]),
+html.dark .bg-white\/90:not([class*="dark:bg"]),
+html.dark .bg-white\/94:not([class*="dark:bg"]),
+html.dark .bg-white\/95:not([class*="dark:bg"]) { background-color: #111a28; }
+html.dark .bg-slate-50:not([class*="dark:bg"]),
+html.dark .bg-\[\#f8fafc\]:not([class*="dark:bg"]),
+html.dark .bg-\[\#f2f6fa\]:not([class*="dark:bg"]),
+html.dark .bg-\[\#f3f7fc\]:not([class*="dark:bg"]) { background-color: #152338; }
+html.dark .bg-slate-100:not([class*="dark:bg"]),
+html.dark .bg-\[\#e8f1fa\]:not([class*="dark:bg"]),
+html.dark .bg-\[\#f0f4f9\]:not([class*="dark:bg"]) { background-color: #1c2b44; }
+html.dark .bg-blue-50:not([class*="dark:bg"]) { background-color: rgba(56, 189, 248, 0.10); }
+html.dark .bg-rose-50:not([class*="dark:bg"]) { background-color: rgba(244, 63, 94, 0.12); }
+html.dark .bg-emerald-50:not([class*="dark:bg"]) { background-color: rgba(16, 185, 129, 0.12); }
+html.dark .hover\:bg-slate-50:hover:not([class*="dark:bg"]) { background-color: #1c2b44; }
+html.dark .hover\:bg-slate-100:hover:not([class*="dark:bg"]) { background-color: #223350; }
+
+/* text */
+html.dark .text-slate-900:not([class*="dark:text"]),
+html.dark .text-slate-800:not([class*="dark:text"]),
+html.dark .text-gray-900:not([class*="dark:text"]),
+html.dark .text-black:not([class*="dark:text"]),
+html.dark .text-\[\#18283f\]:not([class*="dark:text"]) { color: #f1f5f9; }
+html.dark .text-slate-700:not([class*="dark:text"]) { color: #cbd5e1; }
+html.dark .text-slate-600:not([class*="dark:text"]) { color: #94a3b8; }
+
+/* borders */
+html.dark .border-slate-200:not([class*="dark:border"]),
+html.dark .border-slate-100:not([class*="dark:border"]),
+html.dark .border-\[\#e2eaf4\]:not([class*="dark:border"]) { border-color: rgba(255, 255, 255, 0.08); }
+html.dark .border-slate-300:not([class*="dark:border"]) { border-color: rgba(255, 255, 255, 0.14); }

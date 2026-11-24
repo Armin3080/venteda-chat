@@ -1,0 +1,250 @@
+/* ==========================================================================
+   VENTEDA CHAT - glass look, button motion, and call screen polish.
+   Loaded after venteda.css. Pure CSS (plus one small ripple script in app.js).
+   ========================================================================== */
+
+:root {
+  --v-glass: rgba(15, 23, 38, 0.62);
+  --v-glass-border: rgba(255, 255, 255, 0.08);
+  --v-accent: #2563eb;
+  --v-accent-2: #38bdf8;
+  --v-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ---------- background: soft light mesh behind the glass ---------- */
+html.dark body {
+  background:
+    radial-gradient(900px 500px at 12% -10%, rgba(37, 99, 235, 0.20), transparent 60%),
+    radial-gradient(800px 500px at 100% 110%, rgba(14, 165, 233, 0.14), transparent 60%),
+    #080d16 !important;
+}
+
+/* ---------- glass surfaces ---------- */
+html.dark #sidebarPanel {
+  background: var(--v-glass) !important;
+  backdrop-filter: blur(22px) saturate(170%);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  border-right: 1px solid var(--v-glass-border) !important;
+  box-shadow: 10px 0 40px -20px rgba(0, 0, 0, 0.6);
+}
+html.dark header {
+  background: rgba(17, 26, 40, 0.55) !important;
+  backdrop-filter: blur(20px) saturate(160%);
+  -webkit-backdrop-filter: blur(20px) saturate(160%);
+  box-shadow: 0 8px 30px -18px rgba(0, 0, 0, 0.7);
+}
+
+/* subtle depth on every rounded card / panel */
+html.dark .rounded-3xl,
+html.dark .rounded-2xl {
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, 0.65);
+}
+
+/* ---------- inputs: glow on focus ---------- */
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.28);
+  transition: box-shadow 0.25s var(--v-ease), border-color 0.25s;
+}
+
+/* ---------- buttons: lift, press, ripple ---------- */
+button {
+  transition: transform 0.18s var(--v-ease), box-shadow 0.3s var(--v-ease),
+              background-color 0.25s, color 0.25s, opacity 0.2s, filter 0.2s;
+}
+button:not(.absolute):not(.fixed):not(:disabled) {
+  position: relative;
+  overflow: hidden;
+}
+button:not(.absolute):not(.fixed):not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 26px -12px rgba(37, 99, 235, 0.55);
+}
+button:not(.absolute):not(.fixed):not(:disabled):active {
+  transform: scale(0.95);
+  transition-duration: 0.08s;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* gradient buttons get a moving sheen on hover */
+button[class*="bg-gradient-to-"]:not(:disabled):hover {
+  background-size: 200% 100%;
+  animation: v-sheen 1.4s linear infinite;
+}
+@keyframes v-sheen {
+  from { background-position: 0% 50%; }
+  to   { background-position: 200% 50%; }
+}
+
+/* ripple wave (spawned by app.js on pointerdown) */
+.ripple-wave {
+  position: absolute;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0) 70%);
+  transform: scale(0);
+  opacity: 0.9;
+  pointer-events: none;
+  animation: v-ripple 0.6s var(--v-ease) forwards;
+}
+@keyframes v-ripple {
+  to { transform: scale(1); opacity: 0; }
+}
+
+/* ---------- entrance motion ---------- */
+@keyframes v-rise {
+  from { opacity: 0; transform: translateY(10px) scale(0.98); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes v-slide-in {
+  from { opacity: 0; transform: translateX(28px) scale(0.97); }
+  to   { opacity: 1; transform: none; }
+}
+#incomingCallModal {
+  animation: v-slide-in 0.45s var(--v-ease) both;
+  box-shadow: 0 28px 70px -20px rgba(37, 99, 235, 0.5);
+}
+#profilePanel, #tgSettingsPanel { will-change: transform; }
+
+/* ---------- call screen ---------- */
+#callOverlayModal {
+  background:
+    radial-gradient(900px 600px at 50% 25%, rgba(37, 99, 235, 0.38), transparent 65%),
+    radial-gradient(700px 500px at 50% 110%, rgba(14, 165, 233, 0.22), transparent 60%),
+    rgba(2, 6, 23, 0.93) !important;
+  backdrop-filter: blur(28px) saturate(140%);
+  -webkit-backdrop-filter: blur(28px) saturate(140%);
+}
+#callPeerName {
+  text-shadow: 0 2px 22px rgba(56, 189, 248, 0.35);
+  animation: v-rise 0.5s var(--v-ease) both;
+}
+#callStatusLabel {
+  transition: color 0.3s;
+}
+#callAudioModeWrap > div:last-child {
+  animation: v-float 3.2s ease-in-out infinite;
+}
+@keyframes v-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-8px); }
+}
+#callVideoContainer {
+  box-shadow: 0 35px 90px -25px rgba(0, 0, 0, 0.8), inset 0 0 0 1px rgba(255, 255, 255, 0.06) !important;
+  animation: v-rise 0.5s var(--v-ease) both;
+}
+#localVideo {
+  transition: transform 0.3s var(--v-ease), box-shadow 0.3s;
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.7) !important;
+}
+#localVideo:hover {
+  transform: scale(1.04);
+}
+#callOverlayModal > div:last-child {
+  animation: v-rise 0.6s var(--v-ease) both;
+}
+#callOverlayModal button {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 1.1rem !important;
+}
+#callOverlayModal button:not(:disabled):hover {
+  transform: translateY(-3px) scale(1.07);
+  box-shadow: 0 14px 30px -10px rgba(255, 255, 255, 0.35);
+}
+#callOverlayModal button:not(:disabled):active {
+  transform: scale(0.9);
+}
+/* the red hang-up button pulses gently */
+#callOverlayModal button.bg-rose-600,
+#callOverlayModal button[class*="bg-red"],
+#callOverlayModal button[class*="bg-rose"] {
+  animation: v-hangup 2.2s ease-in-out infinite;
+}
+@keyframes v-hangup {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244, 63, 94, 0.45); }
+  50%      { box-shadow: 0 0 0 12px rgba(244, 63, 94, 0); }
+}
+
+/* incoming call: ringing rings around the caller icon */
+#incomingCallModal .animate-bounce {
+  position: relative;
+  animation: v-ring 1.6s ease-out infinite !important;
+}
+@keyframes v-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.55); }
+  100% { box-shadow: 0 0 0 18px rgba(56, 189, 248, 0); }
+}
+
+/* ---------- typography: Inter for Latin, Vazirmatn for Persian ---------- */
+html, body, button, input, textarea, select {
+  font-family: 'Inter', 'Vazirmatn', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  font-feature-settings: 'cv11', 'ss01';
+  -webkit-font-smoothing: antialiased;
+}
+html:lang(fa), html:lang(fa) body, [dir="rtl"] {
+  font-family: 'Vazirmatn', 'Inter', system-ui, sans-serif;
+}
+h1, h2, h3, h4 { letter-spacing: -0.01em; }
+.text-\[10px\], .text-\[11px\] { letter-spacing: 0.01em; }
+
+/* ---------- glass layers: three levels of translucency (background, panel, card) ---------- */
+html.dark #profilePanel,
+html.dark #tgSettingsPanel,
+html.dark #emojiPopover,
+html.dark #incomingCallModal,
+html.dark #storyViewersSheet > div {
+  background: linear-gradient(160deg, rgba(30, 41, 59, 0.62), rgba(15, 23, 42, 0.66)) !important;
+  backdrop-filter: blur(26px) saturate(170%);
+  -webkit-backdrop-filter: blur(26px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.10), 0 30px 70px -30px rgba(0, 0, 0, 0.75);
+}
+html.dark .v-glass-card {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 20px 50px -25px rgba(0, 0, 0, 0.7);
+}
+
+/* ---------- notifications (toast) ---------- */
+.toast-glass {
+  backdrop-filter: blur(16px) saturate(160%);
+  -webkit-backdrop-filter: blur(16px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  animation: v-toast 0.45s var(--v-ease) both;
+}
+.toast-out {
+  opacity: 0;
+  transform: translate(-50%, 12px) scale(0.97) !important;
+  transition: opacity 0.3s, transform 0.3s;
+}
+@keyframes v-toast {
+  from { opacity: 0; transform: translate(-50%, 16px) scale(0.96); }
+  to   { opacity: 1; transform: translate(-50%, 0) scale(1); }
+}
+
+/* ---------- emoji / GIF / sticker picker ---------- */
+#emojiPopover {
+  animation: v-rise 0.25s var(--v-ease) both;
+  box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+/* more natural glass: softer blur and a faint edge highlight */
+html.dark #sidebarPanel,
+html.dark header {
+  border-color: rgba(255, 255, 255, 0.06) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 12px 36px -22px rgba(0, 0, 0, 0.7);
+}
+
+/* ---------- respect reduced-motion settings ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

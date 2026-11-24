@@ -1,0 +1,80 @@
+/* ==========================================================================
+   VENTEDA CHAT - design system layer (loaded last).
+   Tokens, consistent sizing, focus rings, loading skeletons and empty states.
+   Only styling: no markup or behaviour changes.
+   ========================================================================== */
+
+:root {
+  /* spacing scale (4px base) */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px; --s-6: 24px; --s-8: 32px;
+  /* radii */
+  --r-sm: 10px; --r-md: 14px; --r-lg: 18px; --r-xl: 24px;
+  /* type scale */
+  --t-xs: 11px; --t-sm: 13px; --t-md: 14px; --t-lg: 16px; --t-xl: 20px;
+  /* motion */
+  --m-fast: 150ms; --m-base: 240ms;
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* ---------- focus: always visible for keyboard users ---------- */
+:focus-visible {
+  outline: 2px solid var(--p-accent, #5eead4) !important;
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+:focus:not(:focus-visible) { outline: none; }
+
+/* ---------- buttons: one minimum size and consistent rhythm ---------- */
+button { font-weight: 600; letter-spacing: 0.01em; }
+button:not(.absolute):not(.fixed):not(.ripple-wave):not(:disabled):active {
+  transition-duration: 80ms;
+}
+
+/* ---------- loading skeletons ---------- */
+.v-skeleton {
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--r-md);
+}
+.v-skeleton::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: v-shimmer 1.4s var(--ease-out) infinite;
+}
+@keyframes v-shimmer { to { transform: translateX(100%); } }
+
+/* ---------- empty states ---------- */
+.v-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: var(--s-2); padding: var(--s-8) var(--s-5); text-align: center;
+  color: #94a3b8;
+}
+.v-empty-icon {
+  width: 56px; height: 56px; border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, rgba(94,234,212,.18), rgba(167,139,250,.18));
+  border: 1px solid rgba(255,255,255,.08);
+  font-size: 24px;
+}
+.v-empty-title { font-size: var(--t-lg); font-weight: 700; color: #e2e8f0; }
+.v-empty-text { font-size: var(--t-sm); max-width: 260px; line-height: 1.5; }
+
+/* ---------- typography rhythm ---------- */
+html.dark h1, html.dark h2, html.dark h3 { font-weight: 700; letter-spacing: -0.015em; }
+html.dark p { line-height: 1.5; }
+
+/* ---------- glass depth: three clear layers ---------- */
+html.dark .v-layer-1 { background: rgba(12, 20, 32, 0.45); }
+html.dark .v-layer-2 { background: rgba(18, 28, 44, 0.62); border: 1px solid rgba(255,255,255,.07); }
+html.dark .v-layer-3 { background: rgba(26, 38, 58, 0.78); border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 12px 32px -18px rgba(0,0,0,.8); }
+
+/* ---------- reduced motion for skeletons too ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .v-skeleton::after { animation: none; }
+}
+html.no-motion .v-skeleton::after { animation: none !important; }

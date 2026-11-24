@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full dark" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Venteda Chat — Owner & Admin Control Center</title>
+  <link rel="icon" type="image/svg+xml" href="/static/images/venteda-logo.svg" />
+  <script>document.documentElement.classList.add("dark");document.documentElement.setAttribute("data-theme","dark");</script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/venteda.css" />
+</head>
+<body class="h-full w-full bg-[#f3f7fc] dark:bg-[#090f18] text-[#18283f] dark:text-slate-100 flex flex-col font-sans select-none overflow-hidden transition-colors">
+
+  <!-- Executive Top Bar -->
+  <header class="h-16 px-6 bg-white/90 dark:bg-[#0e1624]/90 backdrop-blur-md border-b border-[#e2eaf4] dark:border-slate-800 flex items-center justify-between gap-6 shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl shadow-xs ring-1 ring-blue-500/30 overflow-hidden shrink-0">
+        <img src="/static/images/venteda-logo.svg" alt="Venteda" class="w-full h-full object-contain" />
+      </div>
+      <div class="flex items-center gap-2 text-sm font-semibold">
+        <span class="font-extrabold text-blue-600 dark:text-cyan-400">VENTEDA</span>
+        <span class="text-slate-400">/</span>
+        <span class="text-slate-700 dark:text-slate-200">Super-Surveillance & Executive Center</span>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-4">
+      <div class="text-xs flex items-center gap-2">
+        <span class="text-slate-400">Staff:</span>
+        <span id="adminUsernameBadge" class="font-bold">@owner</span>
+        <span id="adminRoleBadge" class="px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase bg-purple-100 text-purple-700 dark:bg-purple-950 dark:text-purple-300">OWNER</span>
+      </div>
+
+      <a href="/" class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs cursor-pointer">
+        ← Return to Messenger
+      </a>
+    </div>
+  </header>
+
+  <!-- Workspace Canvas -->
+  <div class="flex flex-1 min-h-0 overflow-hidden">
+    <!-- Left Navigation Sidebar -->
+    <aside class="w-64 bg-white/70 dark:bg-[#0c1421]/70 backdrop-blur-md border-r border-[#e2eaf4] dark:border-slate-800 p-4 flex flex-col shrink-0">
+      <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-2 px-2">Surveillance & Governance</span>
+      <nav class="space-y-1 text-xs font-semibold">
+        <button onclick="setAdminTab('overview')" id="navTabOverview" class="admin-nav-btn active w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-700 dark:text-cyan-300 font-bold border border-blue-200 dark:border-cyan-800">
+          <span>📊</span> <span>Platform Telemetry</span>
+        </button>
+        <button onclick="setAdminTab('users')" id="navTabUsers" class="admin-nav-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span>👥</span> <span>User Inspector & Bans</span>
+        </button>
+        <button onclick="setAdminTab('live')" id="navTabLive" class="admin-nav-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span>📡</span> <span>Live Global Feed</span>
+        </button>
+        <button onclick="setAdminTab('channels')" id="navTabChannels" class="admin-nav-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span>💬</span> <span>All Chats & Channels</span>
+        </button>
+        <button onclick="setAdminTab('reports')" id="navTabReports" class="admin-nav-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span>🚩</span> <span>Moderation Reports</span>
+        </button>
+        <button onclick="setAdminTab('audit')" id="navTabAudit" class="admin-nav-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span>📜</span> <span>Immutable Audit Log</span>
+        </button>
+        <button onclick="setAdminTab('settings')" id="navTabSettings" class="admin-nav-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span>⚙️</span> <span>System Broadcast</span>
+        </button>
+        <button id="navTabStaff" class="admin-nav-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+          <span>🛡️</span><span>Staff tools</span>
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Main Viewport -->
+    <main class="flex-1 overflow-y-auto p-6 space-y-6">
+
+      <!-- TAB 1: OVERVIEW METRICS -->
+      <section id="tabOverviewSection" class="space-y-6">
+        <div>
+          <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Platform Health & Telemetry</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Real-time stats and database records for Venteda Chat</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" id="overviewMetricsCards">
+          <div class="p-4 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 shadow-xs">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Total Users</span>
+            <span class="text-2xl font-bold font-mono mt-1 block" id="statTotalUsers">-</span>
+          </div>
+          <div class="p-4 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 shadow-xs">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Active Online</span>
+            <span class="text-2xl font-bold font-mono text-emerald-500 mt-1 block" id="statActiveUsers">-</span>
+          </div>
+          <div class="p-4 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 shadow-xs">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Messages</span>
+            <span class="text-2xl font-bold font-mono mt-1 block" id="statTotalMessages">-</span>
+          </div>
+          <div class="p-4 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 shadow-xs">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Conversations</span>
+            <span class="text-2xl font-bold font-mono mt-1 block" id="statTotalConvs">-</span>
+          </div>
+          <div class="p-4 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 shadow-xs">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Open Reports</span>
+            <span class="text-2xl font-bold font-mono text-amber-500 mt-1 block" id="statPendingReports">-</span>
+          </div>
+          <div class="p-4 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 shadow-xs">
+            <span class="text-[10px] uppercase font-bold text-slate-400 block">Media Storage</span>
+            <span class="text-2xl font-bold font-mono mt-1 block" id="statStorageMb">- MB</span>
+          </div>
+        </div>
+
+        <div class="p-5 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 shadow-xs space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-sm font-bold text-slate-900 dark:text-white">7-Day Message Volume Trend</h3>
+            <span class="text-xs font-mono font-bold text-blue-600 dark:text-cyan-400 bg-blue-50 dark:bg-sky-950 px-2.5 py-1 rounded-lg">Real Database Records</span>
+          </div>
+          <div id="volumeBarsChart" class="h-44 flex items-end justify-between gap-3 pt-6 pb-2 px-2 border-b border-slate-100 dark:border-slate-800"></div>
+        </div>
+      </section>
+
+      <!-- TAB 2: USERS DIRECTORY & INSPECTOR -->
+      <section id="tabUsersSection" class="hidden space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">User Directory & Deep Inspection</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Click 'Inspect' on any user to view all their conversations, chats, and surveillance dossier</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="text" id="adminUserSearch" oninput="loadAdminUsers()" placeholder="Search username, email..." class="px-3 py-1.5 text-xs bg-white dark:bg-[#111a28] border border-[#e2eaf4] dark:border-slate-800 rounded-xl" />
+            <select id="adminUserRoleFilter" onchange="loadAdminUsers()" class="px-2.5 py-1.5 text-xs bg-white dark:bg-[#111a28] border border-[#e2eaf4] dark:border-slate-800 rounded-xl">
+              <option value="all">All Roles</option>
+              <option value="owner">Owner</option>
+              <option value="moderator">Moderator</option>
+              <option value="support">Support</option>
+              <option value="user">User</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 overflow-hidden shadow-xs">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-slate-50 dark:bg-[#0c1421] border-b border-[#e2eaf4] dark:border-slate-800 text-slate-400 font-semibold">
+              <tr>
+                <th class="py-3 px-4">User</th>
+                <th class="py-3 px-4">Role</th>
+                <th class="py-3 px-4">Connect PIN</th>
+                <th class="py-3 px-4">Status</th>
+                <th class="py-3 px-4">Warnings</th>
+                <th class="py-3 px-4 text-right">Surveillance & Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminUsersTbody" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB: LIVE GLOBAL SURVEILLANCE FEED -->
+      <section id="tabLiveSection" class="hidden space-y-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Live Global Platform Surveillance</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Real-time message feed across the entire messenger with one-click message deletion</p>
+          </div>
+          <button onclick="loadLiveFeed()" class="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs flex items-center gap-1.5 cursor-pointer shadow-xs">
+            <span>🔄</span> <span>Refresh Stream</span>
+          </button>
+        </div>
+
+        <div id="liveFeedContainer" class="space-y-2"></div>
+      </section>
+
+      <!-- TAB 3: CHANNELS & AUDITED INSPECTION -->
+      <section id="tabChannelsSection" class="hidden space-y-5">
+        <div>
+          <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">All Conversations & Channels</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Inspect any chat transcript directly</p>
+        </div>
+        <div id="adminChannelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+      </section>
+
+      <!-- TAB 4: MODERATION REPORTS -->
+      <section id="tabReportsSection" class="hidden space-y-5">
+        <div>
+          <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Moderation Reports Queue</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">User-flagged violations for spam, harassment, and illegal content</p>
+        </div>
+        <div id="adminReportsList" class="space-y-3"></div>
+      </section>
+
+      <!-- TAB 5: AUDIT LOGS -->
+      <section id="tabAuditSection" class="hidden space-y-5">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Immutable Audit Trail</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Verifiable log of all staff actions, role modifications, and content audits</p>
+          </div>
+          <button onclick="exportAuditCsv()" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-xs font-semibold rounded-xl">
+            📥 Export CSV
+          </button>
+        </div>
+        <div class="bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 overflow-hidden shadow-xs">
+          <table class="w-full text-left text-xs border-collapse">
+            <thead class="bg-slate-50 dark:bg-[#0c1421] border-b border-[#e2eaf4] dark:border-slate-800 text-slate-400 font-semibold">
+              <tr>
+                <th class="py-3 px-4">Timestamp</th>
+                <th class="py-3 px-4">Actor</th>
+                <th class="py-3 px-4">Action</th>
+                <th class="py-3 px-4">Target Type</th>
+                <th class="py-3 px-4">Reason / Notes</th>
+              </tr>
+            </thead>
+            <tbody id="adminAuditTbody" class="divide-y divide-slate-100 dark:divide-slate-800 font-mono text-[11px]"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 6: SETTINGS & ANNOUNCEMENT -->
+      <section id="tabStaffSection" class="hidden space-y-5">
+        <div class="grid grid-cols-1 xl:grid-cols-5 gap-5">
+          <div class="xl:col-span-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-3">
+            <p class="text-[11px] font-bold uppercase tracking-widest text-slate-400">Find users</p>
+            <input id="staffQ" type="search" placeholder="Name, username or email" class="w-full px-3 py-2 rounded-xl bg-black/20 border border-white/10 text-sm" />
+            <div class="grid grid-cols-3 gap-2 text-xs">
+              <select id="staffRole" class="px-2 py-2 rounded-xl bg-black/20 border border-white/10"><option value="">Any role</option><option value="owner">Owner</option><option value="moderator">Moderator</option><option value="support">Support</option><option value="user">User</option></select>
+              <select id="staffStatus" class="px-2 py-2 rounded-xl bg-black/20 border border-white/10"><option value="">Any status</option><option value="active">Active</option><option value="inactive">Inactive</option><option value="banned">Banned</option></select>
+              <select id="staffRisk" class="px-2 py-2 rounded-xl bg-black/20 border border-white/10"><option value="">Any risk</option><option value="25">Risk 25+</option><option value="60">Risk 60+</option></select>
+            </div>
+            <button id="staffSearchBtn" class="w-full py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-teal-300 to-violet-400 text-slate-950">Search</button>
+            <div id="staffResults" class="space-y-1 max-h-[60vh] overflow-y-auto"></div>
+          </div>
+          <div id="staffDetail" class="xl:col-span-3 rounded-2xl border border-white/10 bg-white/[0.03] p-5 min-h-[200px]">
+            <p class="text-sm text-slate-400">Select a user to see the full profile, risk, sessions and notes.</p>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <p class="text-[11px] font-bold uppercase tracking-widest text-slate-400 mb-3">Active stories (moderation)</p>
+          <div id="staffStories" class="grid grid-cols-1 md:grid-cols-2 gap-2"></div>
+        </div>
+      </section>
+
+      <section id="tabSettingsSection" class="hidden space-y-5 max-w-2xl">
+        <div>
+          <h2 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Owner System Settings</h2>
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Global parameters and system broadcast announcements</p>
+        </div>
+        <div class="p-5 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 shadow-xs space-y-3">
+          <h3 class="text-sm font-bold text-slate-900 dark:text-white">📢 Broadcast Announcement to All Connected Clients</h3>
+          <textarea id="broadcastAnnouncementInput" rows="3" placeholder="Enter priority announcement banner text..." class="w-full p-2.5 bg-slate-50 dark:bg-[#0c1421] border border-slate-200 dark:border-slate-800 rounded-xl text-xs"></textarea>
+          <button onclick="sendBroadcastAnnouncement()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-xs cursor-pointer">
+            Broadcast Now
+          </button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- USER DOSSIER & CHAT SURVEILLANCE MODAL -->
+  <!-- ============================================================== -->
+  <div id="userDossierModal" class="hidden fixed inset-0 z-50 bg-slate-900/50 dark:bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="w-full max-w-3xl bg-white dark:bg-[#111a28] border border-[#e2eaf4] dark:border-slate-800 rounded-3xl shadow-2xl p-6 space-y-5 text-xs max-h-[90vh] flex flex-col">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800 shrink-0">
+        <div class="flex items-center gap-3">
+          <div id="dossierAvatar" class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-600 to-sky-500 text-white flex items-center justify-center font-bold text-lg shadow-sm overflow-hidden shrink-0">
+            U
+          </div>
+          <div>
+            <h3 id="dossierName" class="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">User Profile</h3>
+            <div class="flex items-center gap-2 text-slate-500 font-mono text-[11px]">
+              <span id="dossierUsername" class="text-blue-600 dark:text-cyan-400 font-bold">@user</span>
+              <span>·</span>
+              <span id="dossierRoleBadge" class="px-2 py-0.5 rounded uppercase font-bold text-[10px]">USER</span>
+              <span>·</span>
+              <span id="dossierStatusBadge" class="font-semibold">Online</span>
+            </div>
+          </div>
+        </div>
+        <button onclick="closeUserDossier()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white text-base cursor-pointer">✕</button>
+      </div>
+
+      <!-- Quick Stats Strip -->
+      <div class="grid grid-cols-4 gap-2.5 shrink-0" id="dossierStatsStrip">
+        <div class="p-2.5 bg-slate-50 dark:bg-[#0c1421] rounded-xl border border-slate-200 dark:border-slate-800">
+          <span class="text-[10px] text-slate-400 block font-semibold">Connect PIN</span>
+          <span class="font-mono font-bold text-blue-600 dark:text-cyan-400 text-xs" id="dossierPin">-</span>
+        </div>
+        <div class="p-2.5 bg-slate-50 dark:bg-[#0c1421] rounded-xl border border-slate-200 dark:border-slate-800">
+          <span class="text-[10px] text-slate-400 block font-semibold">Sent Messages</span>
+          <span class="font-mono font-bold text-xs" id="dossierTotalMsgs">0</span>
+        </div>
+        <div class="p-2.5 bg-slate-50 dark:bg-[#0c1421] rounded-xl border border-slate-200 dark:border-slate-800">
+          <span class="text-[10px] text-slate-400 block font-semibold">Warnings</span>
+          <span class="font-mono font-bold text-amber-500 text-xs" id="dossierWarnings">0</span>
+        </div>
+        <div class="p-2.5 bg-slate-50 dark:bg-[#0c1421] rounded-xl border border-slate-200 dark:border-slate-800">
+          <span class="text-[10px] text-slate-400 block font-semibold">Active Sessions</span>
+          <span class="font-mono font-bold text-emerald-500 text-xs" id="dossierSessions">1</span>
+        </div>
+      </div>
+
+      <!-- Dossier Action Buttons -->
+      <div class="flex items-center gap-2 p-2.5 bg-slate-100/70 dark:bg-[#0d1624] rounded-2xl shrink-0">
+        <button id="dossierBanBtn" onclick="toggleBanFromDossier()" class="px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs cursor-pointer shadow-xs">
+          Ban User
+        </button>
+        <button onclick="warnFromDossier()" class="px-3 py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-xl text-xs cursor-pointer shadow-xs">
+          Issue Warning
+        </button>
+        <button onclick="changeRoleFromDossier()" class="px-3 py-1.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs cursor-pointer shadow-xs">
+          Change Role
+        </button>
+        <button onclick="revokeSessionsFromDossier()" class="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-800 dark:text-slate-200 font-bold rounded-xl text-xs cursor-pointer">
+          Terminate Sessions
+        </button>
+      </div>
+
+      <!-- Conversations & Surveillance Tabs -->
+      <div class="flex-1 overflow-hidden flex flex-col min-h-0 space-y-3">
+        <h4 class="font-bold text-slate-900 dark:text-white flex items-center justify-between text-xs">
+          <span>User's Active Conversations & Chat History</span>
+          <span id="dossierConvCount" class="text-slate-400 font-mono text-[11px]">0 chats</span>
+        </h4>
+
+        <!-- Chat Split View: Left List of Chats, Right Message Inspector -->
+        <div class="flex-1 flex gap-3 min-h-0 overflow-hidden">
+          <!-- Chat list -->
+          <div class="w-1/2 overflow-y-auto space-y-2 pr-1" id="dossierConvsList"></div>
+
+          <!-- Message Transcript Panel -->
+          <div class="w-1/2 bg-slate-50 dark:bg-[#0c1421] rounded-2xl border border-slate-200 dark:border-slate-800 p-3 flex flex-col overflow-hidden">
+            <div class="pb-2 mb-2 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between shrink-0">
+              <span class="font-bold text-slate-700 dark:text-slate-200 truncate" id="dossierChatTitle">Chat Transcript</span>
+              <span class="text-[10px] text-blue-600 dark:text-cyan-400 font-mono font-bold" id="dossierChatMsgCount">0 msgs</span>
+            </div>
+            <div class="flex-1 overflow-y-auto space-y-2" id="dossierTranscriptScroll">
+              <p class="text-center py-10 text-slate-400 text-xs">Select any conversation on the left to read transcript.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AUDIT INSPECTION MODAL (Legacy standalone) -->
+  <div id="auditInspectModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 dark:bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+    <div class="w-full max-w-xl bg-white dark:bg-[#111a28] border border-[#e2eaf4] dark:border-slate-800 rounded-3xl shadow-2xl p-6 space-y-4 text-xs max-h-[85vh] flex flex-col">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-slate-800">
+        <h3 id="inspectModalTitle" class="text-sm font-bold text-slate-900 dark:text-white">Audited Channel Inspection</h3>
+        <button onclick="closeInspectModal()" class="text-slate-400 hover:text-slate-700">✕</button>
+      </div>
+      <div id="inspectFormWrap" class="space-y-3">
+        <div class="p-3 bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900 rounded-xl text-amber-800 dark:text-amber-200">
+          Reviewing chat content requires a <strong>mandatory justification reason</strong> (min 5 characters) that will be permanently logged in the audit trail.
+        </div>
+        <textarea id="inspectReasonInput" rows="2" placeholder="State mandatory investigation reason (e.g. ticket #4812 report)..." class="w-full p-2.5 bg-slate-50 dark:bg-[#0c1421] border border-slate-200 dark:border-slate-800 rounded-xl text-xs"></textarea>
+        <button onclick="executeInspectMessages()" class="w-full py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl cursor-pointer">
+          Log Justification & Review Messages
+        </button>
+      </div>
+      <div id="inspectedMessagesList" class="hidden flex-1 overflow-y-auto space-y-2"></div>
+    </div>
+  </div>
+
+  <!-- Admin Script Logic -->
+  <script type="module">
+    import { api } from '/static/js/api.js';
+
+    let currentStaff = null;
+    let inspectingConvId = null;
+    let currentDossierUser = null;
+
+    async function initAdmin() {
+      try {
+        currentStaff = await api.getMe();
+        if (!['owner', 'moderator', 'support'].includes(currentStaff.role)) {
+          alert('Access denied: Staff privileges required.');
+          window.location.href = '/';
+          return;
+        }
+        document.getElementById('adminUsernameBadge').textContent = `@${currentStaff.username}`;
+        document.getElementById('adminRoleBadge').textContent = currentStaff.role.toUpperCase();
+        loadOverviewMetrics();
+      } catch (err) {
+        alert('Please log in with a staff account.');
+        window.location.href = '/';
+      }
+    }
+
+    window.setAdminTab = function(tab) {
+      document.querySelectorAll('.admin-nav-btn').forEach(b => {
+        b.className = 'admin-nav-btn w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800';
+      });
+      document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+
+      if (tab === 'overview') {
+        document.getElementById('navTabOverview').className = 'admin-nav-btn active w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-700 dark:text-cyan-300 font-bold border border-blue-200 dark:border-cyan-800';
+        document.getElementById('tabOverviewSection').classList.remove('hidden');
+        loadOverviewMetrics();
+      } else if (tab === 'users') {
+        document.getElementById('navTabUsers').className = 'admin-nav-btn active w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-700 dark:text-cyan-300 font-bold border border-blue-200 dark:border-cyan-800';
+        document.getElementById('tabUsersSection').classList.remove('hidden');
+        loadAdminUsers();
+      } else if (tab === 'live') {
+        document.getElementById('navTabLive').className = 'admin-nav-btn active w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-700 dark:text-cyan-300 font-bold border border-blue-200 dark:border-cyan-800';
+        document.getElementById('tabLiveSection').classList.remove('hidden');
+        loadLiveFeed();
+      } else if (tab === 'channels') {
+        document.getElementById('navTabChannels').className = 'admin-nav-btn active w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-700 dark:text-cyan-300 font-bold border border-blue-200 dark:border-cyan-800';
+        document.getElementById('tabChannelsSection').classList.remove('hidden');
+        loadAdminChannels();
+      } else if (tab === 'reports') {
+        document.getElementById('navTabReports').className = 'admin-nav-btn active w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-700 dark:text-cyan-300 font-bold border border-blue-200 dark:border-cyan-800';
+        document.getElementById('tabReportsSection').classList.remove('hidden');
+        loadAdminReports();
+      } else if (tab === 'audit') {
+        document.getElementById('navTabAudit').className = 'admin-nav-btn active w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-700 dark:text-cyan-300 font-bold border border-blue-200 dark:border-cyan-800';
+        document.getElementById('tabAuditSection').classList.remove('hidden');
+        loadAdminAuditLogs();
+      } else if (tab === 'settings') {
+        document.getElementById('navTabSettings').className = 'admin-nav-btn active w-full flex items-center gap-2.5 px-3 py-2 rounded-xl bg-blue-50 dark:bg-sky-950/60 text-blue-700 dark:text-cyan-300 font-bold border border-blue-200 dark:border-cyan-800';
+        document.getElementById('tabSettingsSection').classList.remove('hidden');
+      }
+    };
+
+    async function loadOverviewMetrics() {
+      try {
+        const m = await api.request('/admin/metrics');
+        document.getElementById('statTotalUsers').textContent = m.total_users;
+        document.getElementById('statActiveUsers').textContent = m.active_users;
+        document.getElementById('statTotalMessages').textContent = m.total_messages;
+        document.getElementById('statTotalConvs').textContent = m.total_conversations;
+        document.getElementById('statPendingReports').textContent = m.pending_reports;
+        document.getElementById('statStorageMb').textContent = `${m.storage_mb} MB`;
+
+        const chart = document.getElementById('volumeBarsChart');
+        const maxVal = Math.max(10, ...m.daily_messages_history.map(d => d.messages));
+        chart.innerHTML = m.daily_messages_history.map(d => {
+          const h = Math.max(10, Math.round((d.messages / maxVal) * 100));
+          return `
+            <div class="flex-1 flex flex-col items-center gap-1.5 h-full justify-end">
+              <span class="text-[10px] font-mono text-slate-400">${d.messages}</span>
+              <div style="height: ${h}%" class="w-full max-w-[36px] bg-gradient-to-t from-blue-600 to-cyan-400 rounded-t-lg"></div>
+              <span class="text-[10px] font-semibold text-slate-500 mt-1">${d.label}</span>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        console.error('Failed to load metrics:', err);
+      }
+    }
+
+    window.loadAdminUsers = async function() {
+      const q = document.getElementById('adminUserSearch')?.value || '';
+      const role = document.getElementById('adminUserRoleFilter')?.value || 'all';
+      let url = `/admin/users?limit=100`;
+      if (q) url += `&query=${encodeURIComponent(q)}`;
+      if (role !== 'all') url += `&role=${role}`;
+
+      try {
+        const users = await api.request(url);
+        const tbody = document.getElementById('adminUsersTbody');
+        tbody.innerHTML = users.map(u => `
+          <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+            <td class="py-3 px-4">
+              <div class="flex items-center gap-2.5">
+                ${u.avatar_url 
+                  ? `<img src="${u.avatar_url}" class="w-8 h-8 rounded-xl object-cover shrink-0 ring-1 ring-blue-500/30" />`
+                  : `<div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-blue-600 to-sky-400 text-white flex items-center justify-center font-bold text-xs shrink-0">${(u.display_name || 'U')[0].toUpperCase()}</div>`}
+                <div>
+                  <span class="font-bold block text-slate-900 dark:text-white">${u.display_name}</span>
+                  <span class="text-slate-400 font-mono text-[11px]">@${u.username}</span>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-4 uppercase font-bold text-[10px] font-mono">${u.role}</td>
+            <td class="py-3 px-4 font-mono text-slate-500">${u.connect_code || '—'}</td>
+            <td class="py-3 px-4">${u.is_banned ? '<span class="text-rose-600 font-bold bg-rose-50 dark:bg-rose-950 px-2 py-0.5 rounded">Banned</span>' : (u.is_online ? '<span class="text-emerald-600 font-semibold bg-emerald-50 dark:bg-emerald-950 px-2 py-0.5 rounded">Online</span>' : '<span class="text-slate-400">Offline</span>')}</td>
+            <td class="py-3 px-4 font-mono">${u.warning_count || 0}</td>
+            <td class="py-3 px-4 text-right space-x-1.5">
+              <button onclick="openUserDossier('${u.id}')" class="px-2.5 py-1 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-lg text-xs cursor-pointer shadow-xs inline-flex items-center gap-1">
+                🔍 Inspect
+              </button>
+              ${u.is_banned 
+                ? `<button onclick="unbanUser('${u.id}')" class="px-2 py-1 bg-emerald-50 text-emerald-700 font-bold rounded hover:bg-emerald-100 cursor-pointer">Unban</button>` 
+                : `<button onclick="promptBanUser('${u.id}', '${u.username}')" class="px-2 py-1 bg-rose-50 text-rose-700 font-bold rounded hover:bg-rose-100 cursor-pointer">Ban</button>`}
+            </td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    };
+
+    // -------------------------------------------------------------------
+    // USER DOSSIER & SURVEILLANCE
+    // -------------------------------------------------------------------
+    window.openUserDossier = async function(userId) {
+      try {
+        const dossier = await api.getUserDossier(userId);
+        currentDossierUser = dossier.user;
+
+        document.getElementById('dossierName').textContent = dossier.user.display_name;
+        document.getElementById('dossierUsername').textContent = `@${dossier.user.username}`;
+        document.getElementById('dossierRoleBadge').textContent = dossier.user.role.toUpperCase();
+        document.getElementById('dossierStatusBadge').textContent = dossier.user.is_banned ? 'BANNED' : (dossier.user.is_online ? 'ONLINE' : 'OFFLINE');
+        document.getElementById('dossierStatusBadge').className = dossier.user.is_banned ? 'text-rose-600 font-bold' : (dossier.user.is_online ? 'text-emerald-500 font-bold' : 'text-slate-400');
+
+        document.getElementById('dossierPin').textContent = dossier.user.connect_code || 'None';
+        document.getElementById('dossierTotalMsgs').textContent = dossier.stats.total_sent_messages;
+        document.getElementById('dossierWarnings').textContent = dossier.user.warning_count || 0;
+        document.getElementById('dossierSessions').textContent = dossier.stats.active_sessions || 0;
+
+        const avatarBox = document.getElementById('dossierAvatar');
+        if (dossier.user.avatar_url) {
+          avatarBox.innerHTML = `<img src="${dossier.user.avatar_url}" class="w-full h-full object-cover" />`;
+        } else {
+          avatarBox.textContent = (dossier.user.display_name || 'U')[0].toUpperCase();
+        }
+
+        const banBtn = document.getElementById('dossierBanBtn');
+        if (dossier.user.is_banned) {
+          banBtn.textContent = 'Unban User';
+          banBtn.className = 'px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs cursor-pointer shadow-xs';
+        } else {
+          banBtn.textContent = 'Ban User';
+          banBtn.className = 'px-3 py-1.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs cursor-pointer shadow-xs';
+        }
+
+        document.getElementById('dossierConvCount').textContent = `${dossier.conversations.length} total chats`;
+
+        // Render user conversations list
+        const convList = document.getElementById('dossierConvsList');
+        if (dossier.conversations.length === 0) {
+          convList.innerHTML = '<p class="text-slate-400 text-xs p-3">No conversations found for this user.</p>';
+        } else {
+          convList.innerHTML = dossier.conversations.map(c => `
+            <div onclick="loadConversationTranscript('${c.id}', '${c.title.replace(/'/g, "\\'")}')" class="p-2.5 bg-slate-50 dark:bg-[#0c1421] hover:bg-blue-50 dark:hover:bg-[#152338] rounded-xl border border-slate-200 dark:border-slate-800 cursor-pointer transition-colors space-y-1">
+              <div class="flex items-center justify-between">
+                <span class="font-bold text-slate-800 dark:text-slate-100 truncate text-xs">${c.title}</span>
+                <span class="text-[10px] font-mono text-blue-600 dark:text-cyan-400 bg-blue-50 dark:bg-sky-950 px-1.5 py-0.5 rounded font-bold">${c.message_count} msgs</span>
+              </div>
+              <div class="flex items-center justify-between text-[10px] text-slate-400">
+                <span class="uppercase">${c.type}</span>
+                <span>${c.other_members.join(', ') || 'Saved Cloud'}</span>
+              </div>
+            </div>
+          `).join('');
+        }
+
+        // Reset transcript
+        document.getElementById('dossierChatTitle').textContent = 'Chat Transcript';
+        document.getElementById('dossierChatMsgCount').textContent = '0 msgs';
+        document.getElementById('dossierTranscriptScroll').innerHTML = '<p class="text-center py-10 text-slate-400 text-xs">Select any conversation on the left to read transcript.</p>';
+
+        document.getElementById('userDossierModal').classList.remove('hidden');
+      } catch (err) {
+        alert('Failed to load user dossier: ' + err.message);
+      }
+    };
+
+    window.closeUserDossier = function() {
+      document.getElementById('userDossierModal').classList.add('hidden');
+      currentDossierUser = null;
+    };
+
+    window.loadConversationTranscript = async function(convId, title) {
+      try {
+        const res = await api.getAdminConversationMessages(convId);
+        document.getElementById('dossierChatTitle').textContent = title || res.title;
+        document.getElementById('dossierChatMsgCount').textContent = `${res.messages.length} msgs`;
+
+        const scroll = document.getElementById('dossierTranscriptScroll');
+        if (res.messages.length === 0) {
+          scroll.innerHTML = '<p class="text-center py-8 text-slate-400 text-xs">No messages in this chat.</p>';
+          return;
+        }
+
+        scroll.innerHTML = res.messages.map(m => `
+          <div class="p-2 rounded-xl bg-white dark:bg-[#111a28] border border-slate-200/70 dark:border-slate-800 space-y-1">
+            <div class="flex items-center justify-between text-[10px]">
+              <span class="font-bold text-blue-600 dark:text-cyan-400">@${m.sender_username} (${m.sender_display_name})</span>
+              <span class="text-slate-400 font-mono">${new Date(m.created_at).toLocaleTimeString()}</span>
+            </div>
+            <p class="text-xs text-slate-800 dark:text-slate-200 leading-relaxed">${m.text}</p>
+            ${m.has_attachments ? `
+              <div class="pt-1 flex flex-wrap gap-1">
+                ${m.attachments.map(a => `<a href="${a.url}" target="_blank" class="text-[10px] text-blue-500 hover:underline">📎 ${a.original_name}</a>`).join('')}
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+        scroll.scrollTop = scroll.scrollHeight;
+      } catch (err) {
+        alert('Failed to load chat messages: ' + err.message);
+      }
+    };
+
+    window.toggleBanFromDossier = async function() {
+      if (!currentDossierUser) return;
+      if (currentDossierUser.is_banned) {
+        await window.unbanUser(currentDossierUser.id);
+        window.openUserDossier(currentDossierUser.id);
+      } else {
+        await window.promptBanUser(currentDossierUser.id, currentDossierUser.username);
+        window.openUserDossier(currentDossierUser.id);
+      }
+    };
+
+    window.warnFromDossier = async function() {
+      if (!currentDossierUser) return;
+      await window.warnUser(currentDossierUser.id);
+      window.openUserDossier(currentDossierUser.id);
+    };
+
+    window.changeRoleFromDossier = async function() {
+      if (!currentDossierUser) return;
+      const newRole = prompt(`Enter new role for @${currentDossierUser.username} (user, support, moderator, owner):`, currentDossierUser.role);
+      if (!newRole || !['user', 'support', 'moderator', 'owner'].includes(newRole.trim().toLowerCase())) return;
+      try {
+        await api.request(`/admin/users/${currentDossierUser.id}/role`, {
+          method: 'POST',
+          body: JSON.stringify({ new_role: newRole.trim().toLowerCase(), reason: 'Admin panel role update' })
+        });
+        alert(`Role updated to ${newRole}.`);
+        window.openUserDossier(currentDossierUser.id);
+        window.loadAdminUsers();
+      } catch (e) {
+        alert(e.message);
+      }
+    };
+
+    window.revokeSessionsFromDossier = async function() {
+      if (!currentDossierUser) return;
+      if (!confirm(`Terminate all active sessions for @${currentDossierUser.username}?`)) return;
+      try {
+        await api.request(`/admin/users/${currentDossierUser.id}/revoke-sessions`, {
+          method: 'POST',
+          body: JSON.stringify({ reason: 'Admin manual revocation' })
+        });
+        alert('All sessions terminated.');
+        window.openUserDossier(currentDossierUser.id);
+      } catch (e) {
+        alert(e.message);
+      }
+    };
+
+    // -------------------------------------------------------------------
+    // LIVE FEED SURVEILLANCE
+    // -------------------------------------------------------------------
+    window.loadLiveFeed = async function() {
+      try {
+        const feed = await api.getAdminLiveFeed();
+        const container = document.getElementById('liveFeedContainer');
+        if (feed.length === 0) {
+          container.innerHTML = '<p class="text-center py-12 text-slate-400 text-xs">No messages recorded yet.</p>';
+          return;
+        }
+
+        container.innerHTML = feed.map(m => `
+          <div class="p-3.5 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 flex items-center justify-between gap-4 text-xs">
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <button onclick="openUserDossier('${m.sender_id}')" class="font-bold text-blue-600 dark:text-cyan-400 hover:underline cursor-pointer">
+                  @${m.sender_username}
+                </button>
+                <span class="text-slate-400">in</span>
+                <span class="font-semibold text-slate-800 dark:text-slate-200 truncate">${m.conversation_title}</span>
+                <span class="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-slate-100 dark:bg-slate-800 text-slate-500">${m.conversation_type}</span>
+                <span class="text-slate-400 font-mono text-[10px] ml-auto">${new Date(m.created_at).toLocaleString()}</span>
+              </div>
+              <p class="text-slate-700 dark:text-slate-300">${m.text}</p>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <button onclick="openUserDossier('${m.sender_id}')" class="px-2.5 py-1 bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-cyan-300 font-semibold rounded-lg hover:bg-blue-100 cursor-pointer text-xs">
+                Inspect User
+              </button>
+              <button onclick="adminDeleteFeedMessage('${m.id}')" class="px-2.5 py-1 bg-rose-50 text-rose-700 dark:bg-rose-950 dark:text-rose-300 font-bold rounded-lg hover:bg-rose-100 cursor-pointer text-xs" title="Super-Admin Delete">
+                🗑️ Delete
+              </button>
+            </div>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Live feed error:', err);
+      }
+    };
+
+    window.adminDeleteFeedMessage = async function(msgId) {
+      if (!confirm('Force-delete this message across the entire messenger?')) return;
+      try {
+        await api.adminDeleteMessage(msgId);
+        alert('Message deleted by admin.');
+        loadLiveFeed();
+      } catch (e) {
+        alert(e.message);
+      }
+    };
+
+    window.promptBanUser = async function(userId, username) {
+      const reason = prompt(`Enter mandatory suspension reason for @${username}:`);
+      if (!reason || !reason.trim()) return;
+      try {
+        await api.request(`/admin/users/${userId}/ban`, {
+          method: 'POST',
+          body: JSON.stringify({ reason: reason.trim() })
+        });
+        alert(`User @${username} has been suspended.`);
+        window.loadAdminUsers();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    window.unbanUser = async function(userId) {
+      if (!confirm('Unban this user?')) return;
+      try {
+        await api.request(`/admin/users/${userId}/unban`, { method: 'POST', body: JSON.stringify({}) });
+        alert('User unbanned.');
+        window.loadAdminUsers();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    window.warnUser = async function(userId) {
+      const reason = prompt('Enter warning reason:');
+      if (!reason) return;
+      try {
+        const res = await api.request(`/admin/users/${userId}/warn`, {
+          method: 'POST',
+          body: JSON.stringify({ reason })
+        });
+        alert(`Warning issued. Total: ${res.warning_count}`);
+        window.loadAdminUsers();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    async function loadAdminChannels() {
+      try {
+        const channels = await api.request('/admin/conversations');
+        const grid = document.getElementById('adminChannelsGrid');
+        grid.innerHTML = channels.map(c => `
+          <div class="p-4 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-blue-600 bg-blue-50 dark:bg-sky-950 px-2 py-0.5 rounded">${c.type}</span>
+              <span class="text-[11px] font-mono text-slate-400">${c.message_count} msgs</span>
+            </div>
+            <h4 class="font-bold text-sm truncate">${c.title}</h4>
+            <p class="text-xs text-slate-500">${c.member_count} members</p>
+            <button onclick="openInspectModal('${c.id}', '${c.title.replace(/'/g, "\\'")}')" class="w-full py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-xs font-semibold rounded-xl cursor-pointer">
+              Audited Inspection 🔍
+            </button>
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    window.openInspectModal = function(convId, title) {
+      inspectingConvId = convId;
+      document.getElementById('inspectModalTitle').textContent = `Audit Review: ${title}`;
+      document.getElementById('inspectFormWrap').classList.remove('hidden');
+      document.getElementById('inspectedMessagesList').classList.add('hidden');
+      document.getElementById('auditInspectModal').classList.remove('hidden');
+    };
+
+    window.closeInspectModal = function() {
+      document.getElementById('auditInspectModal').classList.add('hidden');
+      inspectingConvId = null;
+    };
+
+    window.executeInspectMessages = async function() {
+      const reason = document.getElementById('inspectReasonInput')?.value.trim();
+      if (!reason || reason.length < 5) {
+        alert('A justification reason of at least 5 characters is required.');
+        return;
+      }
+
+      try {
+        const res = await api.request(`/admin/conversations/${inspectingConvId}/audit-inspect`, {
+          method: 'POST',
+          body: JSON.stringify({ reason })
+        });
+        document.getElementById('inspectFormWrap').classList.add('hidden');
+        const list = document.getElementById('inspectedMessagesList');
+        list.classList.remove('hidden');
+        list.innerHTML = res.messages.map(m => `
+          <div class="p-2.5 bg-slate-50 dark:bg-[#0c1421] rounded-xl border border-slate-200 dark:border-slate-800">
+            <div class="flex items-center justify-between text-[11px] mb-1">
+              <span class="font-bold text-blue-600">@${m.sender_username}</span>
+              <span class="text-slate-400">${new Date(m.created_at).toLocaleTimeString()}</span>
+            </div>
+            <p class="text-xs">${m.text}</p>
+          </div>
+        `).join('');
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    async function loadAdminReports() {
+      try {
+        const reports = await api.request('/admin/reports');
+        const list = document.getElementById('adminReportsList');
+        if (reports.length === 0) {
+          list.innerHTML = '<p class="text-center py-8 text-slate-400 text-xs">No pending reports.</p>';
+          return;
+        }
+        list.innerHTML = reports.map(r => `
+          <div class="p-4 bg-white dark:bg-[#111a28] rounded-2xl border border-[#e2eaf4] dark:border-slate-800 flex items-center justify-between text-xs">
+            <div>
+              <div class="flex items-center gap-2 mb-1">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold font-mono uppercase bg-amber-100 text-amber-800">${r.status}</span>
+                <strong>${r.reason_category}</strong>
+              </div>
+              <p class="text-slate-600 dark:text-slate-300">Reporter: <strong>@${r.reporter_username}</strong> · Target: <strong class="text-rose-600">@${r.reported_username}</strong></p>
+              ${r.message_snippet ? `<p class="italic text-slate-500 mt-1">"${r.message_snippet}"</p>` : ''}
+            </div>
+            ${r.status === 'pending' ? `
+              <div class="flex items-center gap-2">
+                <button onclick="resolveReport('${r.id}', 'resolve_dismiss')" class="px-2.5 py-1 bg-slate-100 rounded">Dismiss</button>
+                <button onclick="resolveReport('${r.id}', 'resolve_ban')" class="px-2.5 py-1 bg-rose-600 text-white font-bold rounded">Ban User</button>
+              </div>
+            ` : ''}
+          </div>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    window.resolveReport = async function(reportId, action) {
+      try {
+        await api.request(`/admin/reports/${reportId}/resolve`, {
+          method: 'POST',
+          body: JSON.stringify({ action })
+        });
+        alert('Report resolved.');
+        loadAdminReports();
+      } catch (err) {
+        alert(err.message);
+      }
+    };
+
+    async function loadAdminAuditLogs() {
+      try {
+        const logs = await api.request('/admin/audit-logs');
+        const tbody = document.getElementById('adminAuditTbody');
+        tbody.innerHTML = logs.map(l => `
+          <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/30">
+            <td class="py-2.5 px-4 text-slate-400">${new Date(l.created_at).toLocaleString()}</td>
+            <td class="py-2.5 px-4 text-blue-600 font-semibold">@${l.actor_username}</td>
+            <td class="py-2.5 px-4"><span class="px-1.5 py-0.5 bg-slate-100 dark:bg-slate-800 rounded font-bold">${l.action}</span></td>
+            <td class="py-2.5 px-4 uppercase text-slate-400">${l.target_type}</td>
+            <td class="py-2.5 px-4 font-sans text-xs max-w-sm truncate">${l.reason || '—'}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        console.error(e);
+      }
+    }
+
+    window.exportAuditCsv = async function() {
+      const logs = await api.request('/admin/audit-logs');
+      const csv = 'Timestamp,Actor,Action,TargetType,Reason\n' +
+        logs.map(l => `"${l.created_at}","${l.actor_username}","${l.action}","${l.target_type}","${(l.reason || '').replace(/"/g, '""')}"`).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `venteda_audit_${Date.now()}.csv`;
+      a.click();
+    };
+
+    window.sendBroadcastAnnouncement = async function() {
+      const text = document.getElementById('broadcastAnnouncementInput')?.value.trim();
+      if (!text) return;
+      try {
+        const res = await api.request('/admin/announcements', { method: 'POST', body: JSON.stringify({ text }) });
+        alert(`Announcement delivered to ${res.delivered_to} online users.`);
+        document.getElementById('broadcastAnnouncementInput').value = '';
+      } catch (e) {
+        alert('Could not send announcement: ' + e.message);
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', initAdmin);
+  </script>
+  <script type="module" src="/static/js/admin-staff.js"></script>
+</body>
+</html>

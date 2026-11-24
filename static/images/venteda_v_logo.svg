@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none">
+  <defs>
+    <linearGradient id="vBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="50%" stop-color="#1e293b" />
+      <stop offset="100%" stop-color="#090d16" />
+    </linearGradient>
+    <linearGradient id="vWingLeft" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8" />
+      <stop offset="40%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#1d4ed8" />
+    </linearGradient>
+    <linearGradient id="vWingRight" x1="100%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" />
+      <stop offset="35%" stop-color="#3b82f6" />
+      <stop offset="70%" stop-color="#6366f1" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+    <linearGradient id="vGlow" x1="50%" y1="0%" x2="50%" y2="100%">
+      <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.9" />
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0.1" />
+    </linearGradient>
+    <filter id="vDropShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#2563eb" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Background rounded squircle container -->
+  <rect x="4" y="4" width="120" height="120" rx="32" fill="url(#vBgGrad)" stroke="rgba(56, 189, 248, 0.25)" stroke-width="2" />
+  
+  <!-- Subtle ambient inner glow -->
+  <circle cx="64" cy="64" r="46" fill="#2563eb" opacity="0.18" filter="blur(24px)" />
+
+  <!-- Outer Stylized Modern 'V' Glyphs -->
+  <g filter="url(#vDropShadow)">
+    <!-- Left Wing -->
+    <path d="M 28 32 L 48 32 L 64 86 L 50 86 Z" fill="url(#vWingLeft)" />
+    
+    <!-- Right Wing with Dynamic Sweep and Overlap -->
+    <path d="M 100 32 L 78 32 L 58 98 L 70 98 Z" fill="url(#vWingRight)" />
+    
+    <!-- Sleek Diagonal Speed Accent (Cutout notch) -->
+    <path d="M 44 32 L 56 32 L 64 60 L 54 60 Z" fill="#ffffff" opacity="0.15" />
+    <path d="M 84 32 L 72 32 L 64 60 L 74 60 Z" fill="#67e8f9" opacity="0.4" />
+    
+    <!-- Central Sharp Diamond Apex Core -->
+    <polygon points="64,90 71,99 64,107 57,99" fill="#38bdf8" />
+    <polygon points="64,92 69,99 64,105 59,99" fill="#ffffff" opacity="0.9" />
+  </g>
+</svg>

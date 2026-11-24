@@ -1,0 +1,155 @@
+/* ==========================================================================
+   VENTEDA CHAT - six switchable glass themes.
+   Select with <html data-pack="...">: cyber | anime | neon | nature | galaxy | aurora.
+   Colours are CSS variables; surfaces stay static (no heavy animation) so low-end PCs stay smooth.
+   ========================================================================== */
+
+html[data-pack="cyber"]   { --p-bg: radial-gradient(1000px 600px at 15% -10%, rgba(34,211,238,.18), transparent 60%), radial-gradient(900px 600px at 100% 110%, rgba(37,99,235,.22), transparent 60%), #050b1a;
+  --p-glass: rgba(9,22,46,.58); --p-edge: rgba(34,211,238,.22); --p-glow: rgba(34,211,238,.45); --p-accent: #22d3ee; --p-accent2: #2563eb; }
+html[data-pack="anime"]   { --p-bg: radial-gradient(1000px 600px at 85% -10%, rgba(192,132,252,.22), transparent 60%), radial-gradient(900px 600px at 0% 110%, rgba(244,114,182,.18), transparent 60%), #0d0616;
+  --p-glass: rgba(28,14,48,.55); --p-edge: rgba(192,132,252,.25); --p-glow: rgba(192,132,252,.5); --p-accent: #c084fc; --p-accent2: #f472b6; }
+html[data-pack="neon"]    { --p-bg: radial-gradient(900px 600px at 50% -15%, rgba(244,63,94,.22), transparent 60%), radial-gradient(800px 500px at 100% 100%, rgba(251,146,60,.14), transparent 60%), #0c0507;
+  --p-glass: rgba(36,10,16,.56); --p-edge: rgba(251,113,133,.25); --p-glow: rgba(244,63,94,.5); --p-accent: #fb7185; --p-accent2: #f43f5e; }
+html[data-pack="nature"]  { --p-bg: radial-gradient(900px 600px at 10% 0%, rgba(52,211,153,.18), transparent 60%), radial-gradient(900px 600px at 100% 100%, rgba(45,212,191,.12), transparent 60%), #05130d;
+  --p-glass: rgba(10,34,25,.55); --p-edge: rgba(167,243,208,.22); --p-glow: rgba(52,211,153,.4); --p-accent: #34d399; --p-accent2: #14b8a6; }
+html[data-pack="galaxy"]  { --p-bg: radial-gradient(1px 1px at 20% 30%, #fff, transparent), radial-gradient(1px 1px at 70% 60%, #fff, transparent), radial-gradient(1.5px 1.5px at 40% 80%, #c4b5fd, transparent), radial-gradient(900px 600px at 80% 10%, rgba(139,92,246,.30), transparent 60%), radial-gradient(900px 600px at 10% 100%, rgba(56,189,248,.18), transparent 60%), #05030f;
+  --p-glass: rgba(20,14,44,.56); --p-edge: rgba(167,139,250,.25); --p-glow: rgba(139,92,246,.5); --p-accent: #a78bfa; --p-accent2: #38bdf8; }
+html[data-pack="aurora"]  { --p-bg: radial-gradient(1100px 520px at 12% -12%, rgba(45,212,191,.16), transparent 62%), radial-gradient(1000px 520px at 92% -8%, rgba(167,139,250,.16), transparent 62%), radial-gradient(900px 560px at 50% 118%, rgba(56,189,248,.10), transparent 60%), #04070d;
+  --p-glass: rgba(12,20,32,.58); --p-edge: rgba(94,234,212,.16); --p-glow: rgba(94,234,212,.32); --p-accent: #5eead4; --p-accent2: #a78bfa; }
+  --p-glass: rgba(8,34,44,.50); --p-edge: rgba(94,234,212,.22); --p-glow: rgba(94,234,212,.4); --p-accent: #5eead4; --p-accent2: #a78bfa; }
+
+/* apply the active pack */
+html[data-pack] body { background: var(--p-bg) !important; background-attachment: fixed; }
+html[data-pack] #sidebarPanel,
+html[data-pack] header {
+  background: var(--p-glass) !important;
+  border-color: var(--p-edge) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.07), 0 0 28px -14px var(--p-glow);
+}
+html[data-pack] #profilePanel, html[data-pack] #tgSettingsPanel, html[data-pack] #emojiPopover,
+html[data-pack] #incomingCallModal, html[data-pack] #storyViewersSheet > div {
+  background: var(--p-glass) !important;
+  border-color: var(--p-edge) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 30px 70px -30px var(--p-glow);
+}
+html[data-pack] button[class*="bg-gradient-to-"]:not(:disabled) {
+  background-image: linear-gradient(135deg, var(--p-accent), var(--p-accent2)) !important;
+}
+html[data-pack] button[class*="bg-gradient-to-"]:not(:disabled):hover { box-shadow: 0 0 22px -6px var(--p-glow); }
+html[data-pack] input:focus, html[data-pack] textarea:focus { box-shadow: 0 0 0 3px var(--p-glow) !important; }
+html[data-pack] #conversationsList > div:hover, html[data-pack] #conversationsList .bg-blue-50 { box-shadow: inset 2px 0 0 var(--p-accent); }
+
+/* neon text accent for titles */
+html[data-pack] #chatTitleHeader, html[data-pack] #sidebarUserDisplayName { text-shadow: 0 0 18px var(--p-glow); }
+
+/* ---------- low-end mode: no blur, no shadows-heavy effects ---------- */
+html.lowend *, html.lowend *::before, html.lowend *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  animation: none !important;
+}
+html.lowend #sidebarPanel, html.lowend header,
+html.lowend #profilePanel, html.lowend #tgSettingsPanel, html.lowend #emojiPopover {
+  background-color: rgba(15, 23, 42, 0.96) !important;
+}
+
+/* ---------- theme picker cards ---------- */
+.pack-card { border-radius: 18px; padding: 10px; border: 1px solid rgba(255,255,255,.12); transition: transform .2s, box-shadow .2s; cursor: pointer; }
+.pack-card:hover { transform: translateY(-2px); box-shadow: 0 14px 30px -14px rgba(0,0,0,.6); }
+.pack-card[data-active="1"] { box-shadow: 0 0 0 2px var(--p-accent, #38bdf8); }
+.pack-swatch { height: 70px; border-radius: 12px; margin-bottom: 8px; }
+
+/* ---------- Aurora Obsidian refinements: gradient hairline edges and softer depth ---------- */
+html[data-pack="aurora"] #sidebarPanel,
+html[data-pack="aurora"] header {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.06), inset -1px 0 0 rgba(255,255,255,.03), 0 18px 48px -30px rgba(0,0,0,.85);
+}
+html[data-pack="aurora"] #chatMessagesScroll { background: transparent; }
+html[data-pack="aurora"] button:focus-visible { outline: 2px solid var(--p-accent); outline-offset: 2px; }
+
+/* ---------- user preferences (set in Settings > Interface / Notifications) ---------- */
+html.noglass *, html.noglass *::before, html.noglass *::after {
+  backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+}
+html.noglass #sidebarPanel, html.noglass header, html.noglass #profilePanel,
+html.noglass #tgSettingsPanel, html.noglass #emojiPopover {
+  background-color: rgba(12, 20, 32, 0.97) !important;
+}
+html.no-motion *, html.no-motion *::before, html.no-motion *::after {
+  animation: none !important; transition-duration: 0.01ms !important;
+}
+html.compact #conversationsList > div { padding-top: 0.35rem !important; padding-bottom: 0.35rem !important; }
+html.compact #conversationsList img, html.compact #conversationsList .w-11 { width: 2.5rem; height: 2.5rem; }
+.pref-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 14px 16px; }
+.pref-row + .pref-row { border-top: 1px solid rgba(255,255,255,.06); }
+.pref-seg { display: inline-flex; padding: 3px; border-radius: 12px; background: rgba(255,255,255,.06); }
+.pref-seg button { padding: 6px 12px; border-radius: 9px; font-size: 12px; font-weight: 600; color: #94a3b8; background: transparent; border: none; }
+.pref-seg button[data-on="1"] { background: linear-gradient(135deg, var(--p-accent, #5eead4), var(--p-accent2, #a78bfa)); color: #04070d; }
+.pref-switch { position: relative; width: 44px; height: 26px; border-radius: 999px; background: rgba(255,255,255,.14); border: none; cursor: pointer; transition: background .25s; }
+.pref-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); transition: transform .25s var(--v-ease, cubic-bezier(.2,.8,.2,1)); }
+.pref-switch[data-on="1"] { background: linear-gradient(135deg, var(--p-accent, #5eead4), var(--p-accent2, #a78bfa)); }
+.pref-switch[data-on="1"]::after { transform: translateX(18px); }
+
+/* ---------- Aurora identity refresh ---------- */
+html[data-pack="aurora"] #conversationsList > div {
+  border-radius: 16px;
+  transition: background .25s, box-shadow .25s, transform .2s var(--v-ease, cubic-bezier(.2,.8,.2,1));
+}
+html[data-pack="aurora"] #conversationsList > div:hover { transform: translateX(-2px); }
+html[data-pack="aurora"] #conversationsList > div.bg-blue-50,
+html[data-pack="aurora"] #conversationsList > div[class*="bg-blue"] {
+  background: linear-gradient(90deg, rgba(94,234,212,.14), rgba(167,139,250,.10)) !important;
+  box-shadow: inset 0 0 0 1px rgba(94,234,212,.22), 0 8px 24px -14px rgba(94,234,212,.45);
+}
+html[data-pack="aurora"] #chatTitleHeader {
+  background: linear-gradient(90deg, #5eead4, #a78bfa);
+  -webkit-background-clip: text; background-clip: text; color: transparent !important;
+}
+html[data-pack="aurora"] #sidebarPanel { position: relative; }
+html[data-pack="aurora"] #sidebarPanel::after {
+  content: ''; position: absolute; top: 0; bottom: 0; right: -1px; width: 1px; pointer-events: none;
+  background: linear-gradient(180deg, transparent, rgba(94,234,212,.5), rgba(167,139,250,.5), transparent);
+}
+html[data-pack="aurora"] input[type="search"], html[data-pack="aurora"] #searchInput {
+  border-radius: 14px;
+}
+
+/* ---------- user options: wallpapers, fonts, contrast, large targets ---------- */
+:root { --wall-a: .12; }
+html[data-wall-strength="subtle"] { --wall-a: .05; }
+html[data-wall-strength="strong"] { --wall-a: .26; }
+html[data-wall="dots"] .chat-canvas-bg {
+  background-color: transparent !important;
+  background-image: radial-gradient(rgba(148,163,184,var(--wall-a)) 1px, transparent 1.2px) !important;
+  background-size: 22px 22px;
+}
+html[data-wall="grid"] .chat-canvas-bg {
+  background-color: transparent !important;
+  background-image: linear-gradient(rgba(148,163,184,var(--wall-a)) 1px, transparent 1px), linear-gradient(90deg, rgba(148,163,184,var(--wall-a)) 1px, transparent 1px) !important;
+  background-size: 34px 34px;
+}
+html[data-wall="aurora"] .chat-canvas-bg {
+  background-color: transparent !important;
+  background-image: radial-gradient(700px 320px at 20% 0%, rgba(94,234,212,var(--wall-a)), transparent 70%), radial-gradient(700px 320px at 90% 100%, rgba(167,139,250,var(--wall-a)), transparent 70%) !important;
+}
+html[data-wall="none"] .chat-canvas-bg { background: none !important; background-color: transparent !important; }
+
+html[data-font="system"], html[data-font="system"] body, html[data-font="system"] button,
+html[data-font="system"] input, html[data-font="system"] textarea {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+html[data-font="inter"], html[data-font="inter"] body, html[data-font="inter"] button,
+html[data-font="inter"] input, html[data-font="inter"] textarea {
+  font-family: 'Inter', system-ui, sans-serif !important;
+}
+html[data-font="vazir"], html[data-font="vazir"] body, html[data-font="vazir"] button,
+html[data-font="vazir"] input, html[data-font="vazir"] textarea {
+  font-family: 'Vazirmatn', 'Inter', system-ui, sans-serif !important;
+}
+
+html.hicontrast body, html.hicontrast p, html.hicontrast span, html.hicontrast label,
+html.hicontrast h1, html.hicontrast h2, html.hicontrast h3, html.hicontrast h4 { color: #f8fafc !important; }
+html.hicontrast .text-slate-400, html.hicontrast .text-slate-500, html.hicontrast .text-slate-600 { color: #cbd5e1 !important; }
+html.hicontrast #sidebarPanel, html.hicontrast header { border-color: rgba(255,255,255,.22) !important; }
+
+html.bigtargets button { min-height: 40px; min-width: 40px; }
